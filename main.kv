@@ -1,0 +1,89 @@
+<RV>:
+    viewclass: 'ShoeButton'
+    orientation: "vertical"
+    RecycleBoxLayout:
+        id: recycle_box_id
+        default_size: None, root.size[1]
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+
+<MyDialog>:
+    id: pin
+    mode: 'fill'
+    hint_text: 'Name of shoes'
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+<MyToolbar>:
+    title: 'Basketball Shoes Parser'
+    elevation: 10
+    right_action_items: [['magnify', lambda x: app.search_menu.open()], ['refresh', lambda x: app.refresh_shoes()]]
+    left_action_items: [['sort-ascending', lambda x: app.sort_ascending()]]
+
+<CustomLabel>:
+    id: c_label_id
+    size_hint: 1, None
+    multiline: True
+    color: 0, 0, 0, 1
+    halign: 'center'
+    # text color
+    color: 182 / 255, 66 / 255, 245 / 255, .9
+    bold: True
+    italic: True
+    outline_color: (0, 0, 0)
+
+<ImageCanvas>:
+    id: shoe_image_id
+    canvas.before:
+        Color:
+            rgb: 250 / 255, 250 / 255, 250 / 255
+		Rectangle:
+			pos: self.pos
+			size: self.size
+    nocache: True
+
+<ShoeButton>:
+    id: shoe_layout_id
+    orientation: 'vertical'
+    padding: [self.height * 0.01]
+
+    ImageCanvas:
+        allow_stretch: True
+        source: root.image_source
+        on_press:
+            import webbrowser
+            webbrowser.open(root.link, autoraise=True)
+
+    CustomLabel:
+        font_size: shoe_layout_id.height * .05
+        outline_width: root.height * .002
+        height: self.texture_size[1]
+        text: root.shoe_name + root.new_line + root.price
+
+<AllShoesScreen>:
+    name: 'all_shoes_screen'
+    MDBoxLayout:
+        orientation: 'vertical'
+        MyToolbar:
+            id: my_toolbar_id
+            title: app.title
+            md_bg_color: 182 / 255, 66 / 255, 245 / 255, .85
+            background_palette: 'Primary'
+            elevation: 10
+        RV:
+            id: rv_id
+
+
+<ShoeScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        MyToolbar:
+            id: toolbar_id
+        ShoeButton
+            id: shoe_button_id
+
+
+<BasketShoesApp@ScreenManager>:
+    name: 'win_manager'
+    AllShoesScreen:
